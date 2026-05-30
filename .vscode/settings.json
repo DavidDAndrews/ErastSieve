@@ -1,0 +1,5 @@
+{
+    "coderabbit.agentType": "Claude Code",
+    "coderabbit.autoReviewMode": "auto",
+    "coderabbit.reviewTimeout": 60
+}
