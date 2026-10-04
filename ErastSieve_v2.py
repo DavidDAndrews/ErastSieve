@@ -7,7 +7,7 @@ using the Sieve of Eratosthenes algorithm.
 
 New features in v2.0:
 - Dark mode support
-- Export to CSV, TXT, JSON, and clipboard
+- Export to CSV, TXT, JSON, HTML, and clipboard
 - Segmented sieve for large numbers
 - Progress bar for long calculations
 - Input presets for quick access

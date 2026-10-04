@@ -10,17 +10,16 @@ This is a Python desktop application that calculates prime numbers using the Sie
 
 ### Running the Application
 ```bash
-# Original version
-python ErastSieve.py
-
-# Enhanced version 2.0
 python ErastSieve_v2.py
 ```
 
+The original single-file `ErastSieve.py` was removed in the move to `src/` (still in git history).
+
 ### Virtual Environment
-The project uses a Python virtual environment (venv). To activate:
+No virtual environment is committed (`.venv/` is git-ignored). To create and activate one:
 ```bash
-source venv/bin/activate  # On macOS/Linux
+python3 -m venv .venv
+source .venv/bin/activate  # On macOS/Linux
 ```
 
 ### Installing Dependencies
@@ -29,10 +28,13 @@ pip install -r requirements.txt
 ```
 
 ### Running Tests
+Install `requirements.txt` first: `src/__init__.py` imports `utils`, which imports `pyperclip`.
 ```bash
-python -m pytest tests/
-# or
 python tests/test_calculator.py
+# or
+python -m unittest discover tests
+# or, if pytest is installed (it is not in requirements.txt)
+python -m pytest tests/
 ```
 
 ## Project Structure
@@ -44,11 +46,12 @@ ErastSieve/
 │   ├── config.py          # Configuration and constants
 │   ├── prime_calculator.py # Core algorithm implementation
 │   ├── gui.py             # GUI implementation
+│   ├── gui_fix.py         # Stand-alone Tk button-visibility test (macOS)
 │   └── utils.py           # Utility functions
 ├── tests/
 │   └── test_calculator.py # Unit tests
-├── ErastSieve.py          # Original single-file version
-├── ErastSieve_v2.py       # New entry point
+├── ErastSieve_v2.py       # Entry point
+├── README.md              # User-facing documentation
 └── requirements.txt       # Python dependencies
 ```
 
@@ -65,7 +68,7 @@ ErastSieve/
 
 2. **PrimeCalculatorGUI Class** (`src/gui.py`)
    - Modern GUI with light/dark theme toggle
-   - Export functionality (CSV, TXT, JSON, clipboard)
+   - Export functionality (CSV, TXT, JSON, HTML to ~/Downloads; clipboard)
    - Progress bar for long calculations
    - Input presets for quick access
    - Enhanced statistics display
@@ -92,6 +95,6 @@ ErastSieve/
 
 - Uses threading for non-blocking calculations
 - Supports scientific notation input (e.g., 1e6)
-- Automatic memory usage warnings for large calculations
+- Memory warning dialog when estimated memory use exceeds 2 GB
 - Progress updates during long-running calculations
-- LRU cache for frequently requested prime lists
+- LRU cache of the last `CACHE_SIZE` (10) prime lists

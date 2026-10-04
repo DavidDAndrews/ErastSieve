@@ -6,20 +6,20 @@ An upgraded version of the Prime Number Calculator with significant improvements
 
 ### Features
 - **🌓 Dark Mode**: Toggle between light and dark themes
-- **📊 Export Options**: Save results as CSV, TXT, JSON, or copy to clipboard
+- **📊 Export Options**: Save results as CSV, TXT, JSON or HTML (to your Downloads folder), or copy to clipboard
 - **📈 Progress Bar**: Visual feedback for long calculations
-- **🎯 Input Presets**: Quick buttons for common values (1K, 10K, 100K, 1M, 10M)
+- **🎯 Input Presets**: Quick buttons for common values (1K, 10K, 100K, 1M, 10M, 100M, 500M)
 - **📐 Scientific Notation**: Support for inputs like "1e6" (1 million)
 - **📊 Enhanced Statistics**: Shows calculation time, largest gap, twin primes count
 - **💾 Result Caching**: Instant results for repeated calculations
-- **⚡ Segmented Sieve**: Handles numbers up to 1 billion with reduced memory usage
+- **⚡ Segmented Sieve**: Used above 10 million (inputs up to 1 billion) to keep the sieve itself small
 
 ### Technical Improvements
 - **Modular Architecture**: Separated into logical modules (calculator, GUI, config, utils)
 - **Type Hints**: Better code documentation and IDE support
 - **Threading**: Non-blocking UI during calculations
-- **Memory Warnings**: Alerts for calculations requiring >2GB RAM
-- **Unit Tests**: Comprehensive test coverage
+- **Memory Warnings**: Asks before calculations whose estimated memory use exceeds 2 GB
+- **Unit Tests**: `unittest` tests for the calculator (`tests/test_calculator.py`)
 
 ## 📋 Installation
 
@@ -42,31 +42,37 @@ An upgraded version of the Prime Number Calculator with significant improvements
 4. Export or copy results as needed
 
 ### Advanced Features
-- **Dark Mode**: Click the moon/sun icon in the top-right
-- **Export**: Use the export buttons to save in your preferred format
+- **Dark Mode**: Click the "Dark Mode" / "Light Mode" button in the top-right
+- **Export**: Use the export buttons; files are saved to `~/Downloads` as `PrimeNumbers in <first>-<last>.<ext>` (HTML also opens in your browser)
 - **Large Numbers**: Try scientific notation like "1e8" for 100 million
 - **Stop Calculation**: Click "Stop" during long calculations
 
 ## 🏗️ Architecture
 
 ```
+ErastSieve_v2.py        # Entry point
 src/
 ├── prime_calculator.py  # Core algorithm with caching and segmented sieve
 ├── gui.py              # Modern GUI with themes and export features
 ├── config.py           # Centralized configuration
-└── utils.py            # Export and formatting utilities
+├── utils.py            # Export and formatting utilities
+└── gui_fix.py          # Stand-alone Tk button-visibility test (macOS)
+tests/
+└── test_calculator.py  # Unit tests
 ```
 
 ## ⚡ Performance
 
+Calculation only (no GUI), peak process memory, measured on an Apple M2 Ultra with Python 3.14:
+
 | Input Size | Memory Usage | Time (approx) |
 |------------|--------------|---------------|
-| 1 Million  | ~10 MB       | <0.5s         |
-| 10 Million | ~100 MB      | <5s           |
-| 100 Million| ~1 GB        | <60s          |
-| 1 Billion  | ~256 MB*     | <10min        |
+| 1 Million  | ~30 MB       | <0.1s         |
+| 10 Million | ~130 MB      | <1s           |
+| 100 Million| ~300 MB*     | ~6s           |
+| 1 Billion  | ~2.4 GB*     | ~66s          |
 
-*Uses segmented sieve for reduced memory
+*Uses the segmented sieve (inputs above 10 million). Memory is then dominated by the returned list of primes (about 50.8 million of them below 1 billion).
 
 ## 🔧 Configuration
 
@@ -75,19 +81,19 @@ Edit `src/config.py` to customize:
 - Color themes
 - Font settings
 - Performance parameters
-- Export formats
 
 ## 🧪 Testing
 
-Run the test suite:
+Run the test suite (install `requirements.txt` first; the package imports `pyperclip`):
 ```bash
 python tests/test_calculator.py
+# or
+python -m unittest discover tests
 ```
 
 ## 📝 Notes
 
-- The original single-file version (`ErastSieve.py`) is still available
-- Both versions can run independently
-- Settings are not shared between versions
+- The original single-file version (`ErastSieve.py`) was removed when the project moved to the `src/` package; it remains in the git history
+- Settings (such as the theme) are not saved between runs
 
 Enjoy the enhanced prime calculation experience! 🎉
